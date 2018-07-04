@@ -109,12 +109,21 @@
       return next(action)
     }
 
+    const logger = (store) => (next) => (action) => {
+        console.group(action.type);
+            console.log('The action', action)
+            const result = next(action)
+            console.log('The new state is ', store.getState())
+        console.groupEnd()
+        return result;  // Questiion WHAT is the point of this line?
+    }
+
         // QUESTION I don't understand how rootReducer, going into createStore then when inside dispatch library code,
         // it executes the object like an map/foreach????
         const store = Redux.createStore(Redux.combineReducers({
             todos,
             goals
-        }), Redux.applyMiddleware(checker))
+        }), Redux.applyMiddleware(checker, logger))
         
 
             store.subscribe(() => {
@@ -127,9 +136,9 @@
                 todos.forEach(addTodoToDOM)
             })
 
-        const unsubscribe = store.subscribe(()=> {
-            console.log('The new state is ', store.getState());
-        })
+        // const unsubscribe = store.subscribe(()=> {
+        //     console.log('The new state is ', store.getState());
+        // })
 
         // store.dispatch(addTodoAction(
         //     {

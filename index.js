@@ -26,7 +26,7 @@ function createStore(reducer) {
 
 // APP CODE
 function todos(state = [], action) {
-    if (action.type ===' ADD_TODO') {
+    if (action.type === 'ADD_TODO') {
         return state.concat([action.todo]);
     }
     return state;   // Question: When does this get trigger???  if not equal to action.type HERE
@@ -38,4 +38,11 @@ const unsubscribe = store.subscribe(()=> {
     console.log('The new state is ', store.getState());
 })
 
-unsubscribe();
+store.dispatch({
+    type: 'ADD_TODO',
+    todo: {
+        id: 0,
+        name: 'Learn Redux',
+        complete: false
+    }
+})

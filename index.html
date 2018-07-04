@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Udacity Todos Goals</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
 </head>
 <body>
     <div>
@@ -22,31 +23,6 @@
             function generateId () {
                return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
             }
-        // Library Code
-        function createStore(reducer) {
-            let state;
-            let listeners = [];
-
-            const getState = () => state;
-
-            const subscribe = (listener) => {
-                listeners.push(listener);
-                return () => {
-                    listeners = listeners.filter(l => l != listener)
-                }
-            }
-
-            const dispatch = (action) => {
-                state = reducer(state, action);
-                listeners.forEach(listener => listener());
-            }
-
-            return {
-                getState,
-                subscribe,
-                dispatch
-            }
-        }
 
         const ADD_TODO = 'ADD_TODO';
         const REMOVE_TODO = 'REMOVE_TODO';
@@ -124,7 +100,10 @@
 
         // QUESTION I don't understand how rootReducer, going into createStore then when inside dispatch library code,
         // it executes the object like an map/foreach????
-        const store = createStore(rootReducer);     // ROOT REDUCER IS A BIG STATE TREE { todos: {todos_state_tree}, goals: {goals_STATE_TREE}}
+        const store = Redux.createStore(Redux.combineReducers({
+            todos,
+            goals
+        }))
         
 
             store.subscribe(() => {

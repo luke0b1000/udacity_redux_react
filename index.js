@@ -2,7 +2,7 @@ function todos(state = [], action) {
     if (action.type ===' ADD_TODO') {
         return state.concat([action.todo]);
     }
-    return state;   // Question: When does this get trigger???  if not equal to action.type
+    return state;   // Question: When does this get trigger???  if not equal to action.type HERE
 }
 
 function createStore() {

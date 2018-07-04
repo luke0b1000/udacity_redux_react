@@ -50,7 +50,16 @@ function goals(state = [], action) {
     }
 }
 
-const store = createStore(todos);
+function rootReducer(state = {}, action) {
+    return {
+        todos: todos(state.todos, action),  // RETURNS {todos_STATE_TREE}
+        goals: goals(state.goals, action),  // RETURNS {GOALS_STATE_TREE}
+    }
+}
+
+// QUESTION I don't understand how rootReducer, going into createStore then when inside dispatch library code,
+// it executes the object like an map/foreach????
+const store = createStore(rootReducer);     // ROOT REDUCER IS A BIG STATE TREE { todos: {todos_state_tree}, goals: {goals_STATE_TREE}}
 
 const unsubscribe = store.subscribe(()=> {
     console.log('The new state is ', store.getState());

@@ -1,11 +1,5 @@
-function todos(state = [], action) {
-    if (action.type ===' ADD_TODO') {
-        return state.concat([action.todo]);
-    }
-    return state;   // Question: When does this get trigger???  if not equal to action.type HERE
-}
-
-function createStore() {
+// Library Code
+function createStore(reducer) {
     let state;
     let listeners = [];
 
@@ -19,7 +13,7 @@ function createStore() {
     }
 
     const dispatch = (action) => {
-        state = todos(state, action);
+        state = reducer(state, action);
         listeners.forEach(listener => listener());
     }
 
@@ -30,7 +24,15 @@ function createStore() {
     }
 }
 
-const store = createStore();
+// APP CODE
+function todos(state = [], action) {
+    if (action.type ===' ADD_TODO') {
+        return state.concat([action.todo]);
+    }
+    return state;   // Question: When does this get trigger???  if not equal to action.type HERE
+}
+
+const store = createStore(todos);
 
 const unsubscribe = store.subscribe(()=> {
     console.log('The new state is ', store.getState());

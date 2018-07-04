@@ -16,9 +16,12 @@
         <button id='goalBtn'>Add Goal</button>
         <ul id='goals'></ul>
       </div>
-      
+
     <script type='text/javascript'>
 
+            function generateId () {
+               return Math.random().toString(36).substring(2) + (new Date()).getTime().toString(36);
+            }
         // Library Code
         function createStore(reducer) {
             let state;
@@ -127,50 +130,43 @@
             console.log('The new state is ', store.getState());
         })
 
-        store.dispatch(addTodoAction(
-            {
-                id: 0,
-                name: 'Learn Redux',
-                complete: false
-            }
-        ))
+        // store.dispatch(addTodoAction(
+        //     {
+        //         id: 0,
+        //         name: 'Learn Redux',
+        //         complete: false
+        //     }
+        // ))
 
 
-            store.dispatch(addTodoAction({
-            id: 0,
-            name: 'Walk the dog',
-            complete: false,
-            }))
-
-            store.dispatch(addTodoAction({
-            id: 1,
-            name: 'Wash the car',
-            complete: false,
-            }))
+        function addTodo () {
+            const input = document.getElementById('todo')
+            const name = input.value
+            input.value = ''
 
             store.dispatch(addTodoAction({
-            id: 2,
-            name: 'Go to the gym',
-            complete: true,
+                name,
+                complete: false,
+                id: generateId()
             }))
+        }
 
-            store.dispatch(removeTodoAction(1))
-
-            store.dispatch(toggleTodoAction(0))
+        function addGoal () {
+            const input = document.getElementById('goal')
+            const name = input.value
+            input.value = ''
 
             store.dispatch(addGoalAction({
-            id: 0,
-            name: 'Learn Redux'
+                id: generateId(),
+                name,
             }))
+        }
 
-            store.dispatch(addGoalAction({
-            id: 1,
-            name: 'Lose 20 pounds'
-            }))
+        document.getElementById('todoBtn')
+        .addEventListener('click', addTodo)
 
-            store.dispatch(removeGoalAction(0))
-
-
+        document.getElementById('goalBtn')
+        .addEventListener('click', addGoal)
     </script>
 </body>
 </html>

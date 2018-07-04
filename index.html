@@ -91,7 +91,7 @@
             }
         }
 
-    function checkAndDispatch (store, action) {
+    const checker = (store) => (next) => (action) => {
       if (
         action.type === ADD_TODO &&
         action.todo.name.toLowerCase().includes('bitcoin')
@@ -106,7 +106,7 @@
         return alert("Nope. That's a bad idea.")
       }
 
-      return store.dispatch(action)
+      return next(action)
     }
 
         // QUESTION I don't understand how rootReducer, going into createStore then when inside dispatch library code,
@@ -114,7 +114,7 @@
         const store = Redux.createStore(Redux.combineReducers({
             todos,
             goals
-        }))
+        }), Redux.applyMiddleware(checker))
         
 
             store.subscribe(() => {
@@ -145,7 +145,7 @@
             const name = input.value
             input.value = ''
 
-            checkAndDispatch(store,	xaddTodoAction({
+            store.dispatch(addTodoAction({
                 name,
                 complete: false,
                 id: generateId()
@@ -157,7 +157,7 @@
             const name = input.value
             input.value = ''
 
-            checkAndDispatch(store,	xaddGoalAction({
+            store.dispatch(addGoalAction({
                 id: generateId(),
                 name,
             }))
@@ -181,14 +181,14 @@
       const text = document.createTextNode(todo.name)
 
       const removeBtn = createRemoveButton(() => {
-        checkAndDispatch(store,	xremoveTodoAction(todo.id))
+        store.dispatch(removeTodoAction(todo.id))
       })
 
       node.appendChild(text)
       node.appendChild(removeBtn)
       node.style.textDecoration = todo.complete ? 'line-through' : 'none'
       node.addEventListener('click', () => {
-        checkAndDispatch(store,	xtoggleTodoAction(todo.id))
+        store.dispatch(toggleTodoAction(todo.id))
       })
 
       document.getElementById('todos')
@@ -199,7 +199,7 @@
       const node = document.createElement('li')
       const text = document.createTextNode(goal.name)
       const removeBtn = createRemoveButton(() => {
-        checkAndDispatch(store,	xremoveGoalAction(goal.id))
+        store.dispatch(removeGoalAction(goal.id))
       })
 
       node.appendChild(text)

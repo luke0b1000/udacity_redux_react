@@ -99,6 +99,15 @@
             }
         }
 
+    function loading (state = true, action) {
+      switch(action.type) {
+        case RECEIVE_DATA :
+          return false
+        default :
+          return state
+      }
+    }
+
     const checker = (store) => (next) => (action) => {
       if (
         action.type === ADD_TODO &&
@@ -130,7 +139,8 @@
         // it executes the object like an map/foreach????
         const store = Redux.createStore(Redux.combineReducers({
             todos,
-            goals
+            goals,
+            loading
         }), Redux.applyMiddleware(checker, logger))
         
     </script>
@@ -240,12 +250,17 @@
         ]).then(([ todos, goals ]) => {
           store.dispatch(receiveDataAction(todos, goals))
         })
-        
+
         store.subscribe(() => this.forceUpdate())
       }
         render() {
             const { store } = this.props
-        const { todos, goals } = store.getState()
+        const { todos, goals, loading } = store.getState()
+
+        if (loading === true) {
+          return <h3>Loading</h3>
+        }
+
             return (
             <div>
                 <Todos todos={todos} store={this.props.store}/>
